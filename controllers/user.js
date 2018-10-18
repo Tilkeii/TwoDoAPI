@@ -19,9 +19,6 @@ UserController.addUser = function(firstname, lastname, phone, email, photo, addr
   })
 };
 
-
-/*
->>>>>>> 00567a7af39fe2cb962965db9445eee1818b8d58
 UserController.deleteUser = function(idUser){
   return User.destroy({
     where:{
@@ -94,22 +91,26 @@ UserController.updateUser = function(idUser, newFirstname, newLastname, newPhone
   
 };
 
-/*
-UserController.getUserById = function(userId){
+
+UserController.getUserById = function(idUser){
   return User.find({
     where: {
-      id: userId
+      id: idUser
     }
   })
   .then((user) => {
-    console.log('Utilisateur trouvé');
-    return user;
+    if(user) {
+      console.log('User found.');
+      return user;
+    }
+    return null;
   })
   .catch((error) => {
     console.error(err);
   });
 };
 
+/*
 UserController.getAllUser = function(){
   return User.findAll()
   .catch((err) => {

@@ -75,6 +75,21 @@ userRouter.put('/update' , function(req,res){
   })
 });
 
+userRouter.get('/getById/:id' , function(req,res){
+  UserController.getUserById(req.params.id)
+  .then((user) => {
+    if(user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).end();
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).end();
+  })
+});
+
 /*
 userRouter.post('/login', function(req, res){
   const email = req.body.email;

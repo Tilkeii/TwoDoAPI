@@ -13,20 +13,20 @@ ModelIndex.getModel = function (modelName) {
 };
 
 // prod
-const sequelize = new Sequelize('twodo-sql', 'mysql', 'f17bbb04b81f5565', {
-    host: 'twodo.dokku.aws.me',
-    dialect: 'mysql',
-    port: 2117,
-    operatorsAliases: Op
-});
+// const sequelize = new Sequelize('twodo-sql', 'mysql', 'f17bbb04b81f5565', {
+//     host: 'twodo.dokku.aws.me',
+//     dialect: 'mysql',
+//     port: 2117,
+//     operatorsAliases: Op
+// });
 
 // local
-// const sequelize = new Sequelize('twodo-sql', 'root', 'root', {
-//   host: 'localhost',
-//   dialect: 'mysql',
-//   port: 3306,
-//   operatorsAliases: Op
-// });
+const sequelize = new Sequelize('twodo-sql', 'root', 'root', {
+  host: 'localhost',
+  dialect: 'mysql',
+  port: 3306,
+  operatorsAliases: Op
+});
 
 // LOAD MODELS
 fs.readdirSync(__dirname)
