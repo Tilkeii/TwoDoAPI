@@ -2,26 +2,37 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const controllers = require('../controllers');
 const UserController = controllers.UserController;
-const jwt = require('jsonwebtoken');
+//const jwt = require('jsonwebtoken');
 
 const userRouter = express.Router();
 userRouter.use(bodyParser.json());
 
 userRouter.post('/', function(req, res) {
-  const username = req.body.username;
-  const password = req.body.password;
+  const firstname = req.body.firstname;
+  const lastname = req.body.lastname;
+  const phone = req.body.phone;
   const email = req.body.email;
+  const photo = req.body.photo;
+  const address = req.body.address;
+  const password = req.body.password;
+  const id_categ = parseInt(req.body.id_category);
 
-const user =  UserController.addUser(username, password, email)
-  .then((user) => {
-    res.status(201).json(user);
-  })
-  .catch((err) => {
-    res.status(500).end();
-  });
+  if (isNaN(id_categ)) { 
+    console.log('Category id is not a valid number.'); 
+    return; 
+  }
+
+  const user =  UserController.addUser(firstname, lastname, phone, email, photo, address, password, id_categ)
+    .then((user) => {
+      res.status(201).json(user);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).end();
+    });
 });
 
-
+/*
 userRouter.post('/login', function(req, res){
   const email = req.body.email;
   const password = req.body.password;
@@ -114,7 +125,7 @@ userRouter.put('/updateUser' , function(req,res){
     })
   }});
 });
-
+*/
 
 
 module.exports = userRouter;
