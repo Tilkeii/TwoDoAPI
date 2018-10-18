@@ -15,6 +15,7 @@ userRouter.post('/', function(req, res) {
   const photo = req.body.photo;
   const address = req.body.address;
   const password = req.body.password;
+  
   let id_categ = parseInt(req.body.id_category);
 
   if(isNaN(id_categ)) {
