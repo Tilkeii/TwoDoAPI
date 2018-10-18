@@ -1,11 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const controllers = require('../controllers');
+const middlewares = require('../middlewares');
 const UserController = controllers.UserController;
-//const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
+const sha1 = require('sha1');
+const ensureAuthenticated = middlewares.ensureAuthenticated;
 
 const userRouter = express.Router();
 userRouter.use(bodyParser.json());
+userRouter.use(ensureAuthenticated);
 
 
 userRouter.post('/', function(req, res) {
@@ -15,77 +19,26 @@ userRouter.post('/', function(req, res) {
   const email = req.body.email;
   const photo = req.body.photo;
   const address = req.body.address;
-  const password = req.body.password;
-  
-  let id_categ = parseInt(req.body.id_category);
+  const password = sha1(req.body.password);
 
-  if(isNaN(id_categ)) {
-    id_categ = undefined;
-  }
-
-  const user =  UserController.addUser(firstname, lastname, phone, email, photo, address, password, id_categ)
+  const user =  UserController.addUser(firstname, lastname, phone, email, address, password)
     .then((user) => {
       res.status(201).json(user);
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).end();
+      res.status(err.status || 500).json({ error: err.message || err, code: err.code || '' });
     });
 });
 
-userRouter.delete('/delete/:idUser' , function(req,res){
-  const idUser = req.params.idUser;
-
-  if(idUser === undefined){
-    res.status(500).end();
-    return;
-  }
-  UserController.deleteUser(idUser)
-  .then((user) => {
-    res.status(201).json(user);
-  })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).end();
-  })
-});
-
-userRouter.put('/update' , function(req,res){
-  const idUser = req.body.id;
-  const firstname = req.body.firstname;
-  const lastname = req.body.lastname;
-  const phone = req.body.phone;
-  const email = req.body.email;
-  const photo = req.body.photo;
-  const address = req.body.address;
-  const password = req.body.password;
-  let id_categ = parseInt(req.body.id_category);
-
-  if(isNaN(id_categ)) {
-    id_categ = undefined;
-  }
-
-  UserController.updateUser(idUser, firstname, lastname, phone, email, photo, address, password, id_categ)
-  .then((user)=>{
-    console.log("User was successfully updated.");
-    res.status(200).json(user);
-  })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).end();
-  })
-});
-
-/*
 userRouter.post('/login', function(req, res){
   const email = req.body.email;
-  const password = req.body.password;
+  const password = sha1(req.body.password);
 
   const user = UserController.login(email, password)
   .then((user) => {
     if(user == null){
-      res.send('Accès refusé').end();
-      return;
+      return res.status(401).json({ error: 'Bad credentials', code: 401 });
     }
 
     jwt.sign({user}, 'secretkey', {expiresIn: '1h'}, (err, token) =>{
@@ -111,6 +64,7 @@ userRouter.get('/allUser', function(req,res){
   })
 });
 
+/*
 userRouter.get('/getUserById/:id' , function(req,res){
   UserController.getUserById(req.params.id)
   .then((user) => {
