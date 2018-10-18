@@ -65,7 +65,7 @@ CategoryController.getCategoryById = function(idCategory){
             return category;
         })
         .catch((error) => {
-            console.error(err);
+            console.error(error);
         });
 };
 
