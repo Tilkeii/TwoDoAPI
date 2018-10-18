@@ -3,7 +3,6 @@
 module.exports = function(sequelize , DataTypes){
 
 const User = sequelize.define('User', {
-
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,
@@ -26,8 +25,7 @@ const User = sequelize.define('User', {
             allowNull: false
         },
         photo: {
-            type: DataTypes.STRING,
-            allowNull: false
+            type: DataTypes.STRING
         },
         address: {
             type: DataTypes.STRING,
@@ -49,9 +47,5 @@ const User = sequelize.define('User', {
 };
 
 function _associate(models) {
-    models.User.belongsTo(models.Category, {
-        foreignKey: {
-            allowNull: false
-        }
-    }); 
+    models.User.belongsTo(models.Category);
 }

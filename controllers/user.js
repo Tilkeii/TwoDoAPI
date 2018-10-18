@@ -1,22 +1,46 @@
+const sha1 = require('sha1');
+
 const ModelIndex = require('../models');
 const User = ModelIndex.User;
 
 const UserController = function() {};
 
-UserController.addUser = function(firstname, lastname, phone, email, photo, address, password, id_categ){
+UserController.addUser = function(firstname, lastname, phone, email, address, password) {
   return User.create({
     firstname: firstname,
     lastname: lastname,
     phone: phone,
     email: email,
-    photo: photo,
     address: address,
     password: password,
-    category_id: id_categ
   })
   .catch((err) => {
     console.error(err);
   })
+};
+
+UserController.login = function(email, password){
+  return User.find({
+    where : {
+      email : email,
+      password : password
+    }
+  })
+  .then((user)=>{
+    if(user){
+      return user;
+    }
+    else{
+      return null;
+    }
+  })
+};
+
+UserController.getAllUser = function(){
+  return User.findAll()
+  .catch((err) => {
+    console.error(err);
+  });
 };
 
 /*
@@ -80,30 +104,6 @@ UserController.getUserById = function(userId){
     console.error(err);
   });
 };
-
-UserController.getAllUser = function(){
-  return User.findAll()
-  .catch((err) => {
-    console.error(err);
-  });
-};
-
-
-UserController.login = function(email, password){
-  return User.find({
-    where : {
-      email : email,
-      password : password
-    }
-  })
-  .then((user)=>{
-    if(user){
-      return user;
-    }
-    else{
-      return null;
-    }
-  })
-};
 */
+
 module.exports = UserController;

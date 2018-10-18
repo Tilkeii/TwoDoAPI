@@ -14,7 +14,7 @@ ModelIndex.getModel = function (modelName) {
 
 // prod
 const sequelize = new Sequelize('twodo-sql', 'mysql', 'f17bbb04b81f5565', {
-    host: 'twodo.dokku.aws.me',
+    host: '52.47.107.0',
     dialect: 'mysql',
     port: 2117,
     operatorsAliases: Op
