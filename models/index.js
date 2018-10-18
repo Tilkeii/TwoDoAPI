@@ -13,10 +13,18 @@ ModelIndex.getModel = function (modelName) {
 };
 
 // prod
-const sequelize = new Sequelize('twodo-sql', 'mysql', 'f17bbb04b81f5565', {
-    host: 'twodo.dokku.aws.me',
+const config = {
+    user: process.env.DATA_MYSQL_USER || 'mysql',
+    host: process.env.DATA_MYSQL_HOST || 'twodo.dokku.aws.me',
+    port: process.env.DATA_MYSQL_PORT || 2117,
+    database: process.env.DATA_MYSQL_DATABASE || 'twodo-sql',
+    password: process.env.DATA_MYSQL_PASS || 'f17bbb04b81f5565',
+};
+
+const sequelize = new Sequelize(config.database, config.user, config.password, {
+    host: config.host,
     dialect: 'mysql',
-    port: 2117,
+    port: config.port,
     operatorsAliases: Op
 });
 
