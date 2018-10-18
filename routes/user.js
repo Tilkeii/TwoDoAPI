@@ -7,6 +7,7 @@ const UserController = controllers.UserController;
 const userRouter = express.Router();
 userRouter.use(bodyParser.json());
 
+
 userRouter.post('/', function(req, res) {
   const firstname = req.body.firstname;
   const lastname = req.body.lastname;
