@@ -1,25 +1,16 @@
-const connection = require('../db_connection'); 
+const ModelIndex = require('../models');
+const User = ModelIndex.User;
 
 const UserController = function() {};
 
-UserController.addUser = function(fn, ln, phone, email, photo, address, password, id_categ){
-  
-  if (fn === undefined || ln === undefined || phone === undefined || 
-    address === undefined || password === undefined || id_categ === undefined) {
-    return;
-  }
-
-  let params = {firstname: fn, lastname: ln, phone: phone, email: email, photo: photo, address: address, password: password, id_category: id_categ};
-  
-  connection.query('INSERT INTO user SET ?', params, function (error, results, fields) {
-    if (error) throw error;
-    console.log("1 record inserted");
-    console.log(results.insertId);
-    return results.insertId;
-  });
+UserController.addUser = function(username, password, email){
+  return User.create({
+    username: username,
+    password: password,
+    email: email
+  })
 };
 
-/*
 UserController.deleteUser = function(idUser){
   return User.destroy({
     where:{
@@ -104,6 +95,6 @@ UserController.login = function(email, password){
       return null;
     }
   })
-};*/
+};
 
 module.exports = UserController;

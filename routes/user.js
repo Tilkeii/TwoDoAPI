@@ -2,21 +2,17 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const controllers = require('../controllers');
 const UserController = controllers.UserController;
+const jwt = require('jsonwebtoken');
 
 const userRouter = express.Router();
 userRouter.use(bodyParser.json());
 
 userRouter.post('/', function(req, res) {
-  const firstname = req.body.firstname;
-  const lastname = req.body.lastname;
-  const phone = req.body.phone;
-  const email = req.body.email;
-  const photo = req.body.photo;
-  const address = req.body.address;
+  const username = req.body.username;
   const password = req.body.password;
-  const id_category = req.body.id_category;
+  const email = req.body.email;
 
-  const user =  UserController.addUser(firstname, lastname, phone, email, photo, address, password, id_category)
+const user =  UserController.addUser(username, password, email)
   .then((user) => {
     res.status(201).json(user);
   })

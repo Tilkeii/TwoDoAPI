@@ -1,17 +1,12 @@
 const express = require('express');
-const dbManager = require('./db_connection');
+const ModelIndex = require('./models');
 const RouteManager = require('./routes');
-/*
+
 ModelIndex
 .openDatabase()
 .then(_startServer)
 .catch((err) => {
   console.error(err);
-});
-*/
-dbManager.connect(function(err) {
-  if (err) throw err;
-  _startServer();
 });
 
 function _startServer() {
@@ -20,7 +15,7 @@ function _startServer() {
 
   RouteManager.attach(app);
 
-  app.listen(8081, function() {
-    console.log('Server started on 8081...');
+  app.listen(80, function() {
+    console.log('Server started on 80...');
   });
 }
