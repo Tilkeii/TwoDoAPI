@@ -20,8 +20,6 @@ UserController.addUser = function(firstname, lastname, phone, email, photo, addr
 };
 
 
-/*
->>>>>>> 00567a7af39fe2cb962965db9445eee1818b8d58
 UserController.deleteUser = function(idUser){
   return User.destroy({
     where:{
