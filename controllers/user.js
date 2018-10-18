@@ -7,7 +7,7 @@ UserController.addUser = function(username, password, email){
   return User.create({
     username: username,
     password: password,
-    email: email
+    email: email,
   })
 };
 
