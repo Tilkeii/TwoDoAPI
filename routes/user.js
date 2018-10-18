@@ -21,6 +21,12 @@ userRouter.post('/', function(req, res) {
   const address = req.body.address;
   const password = sha1(req.body.password);
 
+  let id_categ = parseInt(req.body.id_category);
+  
+  if(isNaN(id_categ)) {
+    id_categ = null;
+  }
+
   const user =  UserController.addUser(firstname, lastname, phone, email, address, password)
     .then((user) => {
       res.status(201).json(user);
@@ -40,12 +46,6 @@ userRouter.post('/login', function(req, res){
     if(user == null){
       return res.status(401).json({ error: 'Bad credentials', code: 401 });
     }
-
-    jwt.sign({user}, 'secretkey', {expiresIn: '1h'}, (err, token) =>{
-      res.json({
-        token
-      });
-    });
   })
   .catch((err) => {
     console.error(err);
@@ -53,10 +53,20 @@ userRouter.post('/login', function(req, res){
   })
 });
 
-userRouter.get('/allUser', function(req,res){
-  UserController.getAllUser()
-  .then((users) => {
-    res.status(201).json(users);
+userRouter.delete('/delete/:idUser' , function(req,res){
+  const idUser = req.params.idUser;
+
+  if(idUser === undefined){
+    res.status(500).end();
+    return;
+  }
+  UserController.deleteUser(idUser)
+  .then((user) => {
+    if(user) {
+      res.status(204).json(user);
+    } else {
+      res.status(404).end();
+    }
   })
   .catch((err) => {
     console.error(err);
@@ -64,43 +74,51 @@ userRouter.get('/allUser', function(req,res){
   })
 });
 
-/*
-userRouter.get('/getUserById/:id' , function(req,res){
+userRouter.put('/update' , function(req,res){
+  const idUser = req.body.id;
+  const firstname = req.body.firstname;
+  const lastname = req.body.lastname;
+  const phone = req.body.phone;
+  const email = req.body.email;
+  const photo = req.body.photo;
+  const address = req.body.address;
+  const password = req.body.password;
+
+  let id_categ = parseInt(req.body.id_category);
+
+  if(isNaN(id_categ)) {
+    id_categ = null;
+  }
+
+  UserController.updateUser(idUser, firstname, lastname, phone, email, photo, address, password, id_categ)
+  .then((user)=>{
+    if(user) {
+      console.log("User was successfully updated.");
+      res.status(200).json(user);
+    } else {
+      res.status(404).end();
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).end();
+  })
+});
+
+userRouter.get('/getById/:id' , function(req,res){
   UserController.getUserById(req.params.id)
   .then((user) => {
-    res.status(201).json(user);
+    if(user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).end();
+    }
   })
   .catch((err) => {
     console.error(err);
     res.status(500).end();
   })
 });
-
-
-
-userRouter.put('/updateUser' , function(req,res){
-  const token = req.headers["authorization"];
-  jwt.verify(token, 'secretkey', (err) =>{
-  if(err){
-    res.status(403).end('Accès refusé');
-      return;
-  }
-  else{
-    const idUser = req.body.idUser;
-    const username = req.body.username;
-    const password = req.body.password;
-    const email = req.body.email;
-
-    UserController.updateUser(idUser, username, password, email)
-    .then(()=>{
-      console.log("L'utilisateur à été mis à jour");
-    })
-    .catch((err) => {
-      console.error(err);
-    })
-  }});
-});
-*/
 
 
 module.exports = userRouter;
