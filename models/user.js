@@ -48,9 +48,5 @@ const User = sequelize.define('User', {
 };
 
 function _associate(models) {
-    models.User.belongsTo(models.Category, {
-        foreignKey: {
-            allowNull: false
-        }
-    }); 
+    models.User.belongsTo(models.Category); 
 }
