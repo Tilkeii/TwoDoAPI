@@ -55,7 +55,7 @@ UserController.deleteUser = function(idUser){
     if(user) {
       console.log("User was deleted.");
       return true;
-    } 
+    }
     return;
   })
   .catch((err) => {
@@ -75,19 +75,19 @@ UserController.updateUser = function(idUser, newFirstname, newLastname, newPhone
     if(user === undefined || user === null){
       return;
     }
-  
+
     if(newFirstname === undefined || newFirstname === null) {
       newFirstname = user.firstname;
     }
-  
+
     if(newLastname === undefined || newLastname === null) {
       newLastname = user.lastname;
     }
-  
+
     if(newPhone === undefined || newPhone === null) {
       newPhone = user.phone;
     }
-  
+
     if(newEmail === undefined || newEmail === null) {
       newEmail = user.email;
     }

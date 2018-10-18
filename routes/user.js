@@ -3,14 +3,13 @@ const bodyParser = require('body-parser');
 const controllers = require('../controllers');
 const middlewares = require('../middlewares');
 const UserController = controllers.UserController;
-const jwt = require('jsonwebtoken');
 const sha1 = require('sha1');
 const ensureAuthenticated = middlewares.ensureAuthenticated;
 
 const userRouter = express.Router();
+userRouter.use(bodyParser.urlencoded({ extended: true }));
 userRouter.use(bodyParser.json());
 userRouter.use(ensureAuthenticated);
-
 
 userRouter.post('/', function(req, res) {
   const firstname = req.body.firstname;
@@ -22,7 +21,7 @@ userRouter.post('/', function(req, res) {
   const password = sha1(req.body.password);
 
   let id_categ = parseInt(req.body.id_category);
-  
+
   if(isNaN(id_categ)) {
     id_categ = null;
   }
@@ -38,6 +37,10 @@ userRouter.post('/', function(req, res) {
 });
 
 userRouter.post('/login', function(req, res){
+  if (!req.body || !req.body.email || !req.body.password) {
+    return res.status(401).json({ error: 'Bad credentials', code: 401 });
+  }
+
   const email = req.body.email;
   const password = sha1(req.body.password);
 
@@ -46,6 +49,8 @@ userRouter.post('/login', function(req, res){
     if(user == null){
       return res.status(401).json({ error: 'Bad credentials', code: 401 });
     }
+
+    res.json(user);
   })
   .catch((err) => {
     console.error(err);
