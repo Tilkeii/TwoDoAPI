@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express');
 const ModelIndex = require('./models');
 const RouteManager = require('./routes');
