@@ -3,7 +3,6 @@
 module.exports = function(sequelize , DataTypes){
 
 const User = sequelize.define('User', {
-
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,
@@ -48,5 +47,5 @@ const User = sequelize.define('User', {
 };
 
 function _associate(models) {
-    models.User.belongsTo(models.Category); 
+    models.User.belongsTo(models.Category);
 }

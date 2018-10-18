@@ -1,25 +1,49 @@
+const sha1 = require('sha1');
+
 const ModelIndex = require('../models');
 const User = ModelIndex.User;
 
 const UserController = function() {};
 
-UserController.addUser = function(firstname, lastname, phone, email, photo, address, password, id_categ){
+UserController.addUser = function(firstname, lastname, phone, email, address, password) {
   return User.create({
     firstname: firstname,
     lastname: lastname,
     phone: phone,
     email: email,
-    photo: photo,
     address: address,
     password: password,
-    category_id: id_categ
   })
   .catch((err) => {
     console.error(err);
   })
 };
 
+UserController.login = function(email, password){
+  return User.find({
+    where : {
+      email : email,
+      password : password
+    }
+  })
+  .then((user)=>{
+    if(user){
+      return user;
+    }
+    else{
+      return null;
+    }
+  })
+};
 
+UserController.getAllUser = function(){
+  return User.findAll()
+  .catch((err) => {
+    console.error(err);
+  });
+};
+
+/*
 UserController.deleteUser = function(idUser){
   return User.destroy({
     where:{
@@ -45,19 +69,19 @@ UserController.updateUser = function(idUser, newFirstname, newLastname, newPhone
     if(user === undefined){
       return;
     }
-  
+
     if(newFirstname === undefined) {
       newFirstname = user.firstname;
     }
-  
+
     if(newLastname === undefined) {
       newLastname = user.lastname;
     }
-  
+
     if(newPhone === undefined) {
       newPhone = user.phone;
     }
-  
+
     if(newEmail === undefined) {
       newEmail = user.email;
     }
@@ -73,7 +97,7 @@ UserController.updateUser = function(idUser, newFirstname, newLastname, newPhone
     if(newId_categ === undefined) {
       newId_categ = user.category_id;
     }
-  
+
     return user.updateAttributes({
       firstname: newFirstname,
       lastname: newLastname,
@@ -89,7 +113,7 @@ UserController.updateUser = function(idUser, newFirstname, newLastname, newPhone
   .catch((err)=>{
     console.error(err);
   });
-  
+
 };
 
 /*
@@ -107,30 +131,6 @@ UserController.getUserById = function(userId){
     console.error(err);
   });
 };
-
-UserController.getAllUser = function(){
-  return User.findAll()
-  .catch((err) => {
-    console.error(err);
-  });
-};
-
-
-UserController.login = function(email, password){
-  return User.find({
-    where : {
-      email : email,
-      password : password
-    }
-  })
-  .then((user)=>{
-    if(user){
-      return user;
-    }
-    else{
-      return null;
-    }
-  })
-};
 */
+
 module.exports = UserController;
