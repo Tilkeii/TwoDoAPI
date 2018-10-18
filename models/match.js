@@ -2,39 +2,35 @@
 
 module.exports = function(sequelize , DataTypes){
 
-const User = sequelize.define('User', {
+const Match = sequelize.define('Match', {
 
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,
             autoIncrement: true
         },
-        firstname:{
+        id_user_1:{
+            type: DataTypes.BIGINT,
+            allowNull: false
+        },
+        id_user_2:{
+            type: DataTypes.BIGINT,
+            allowNull: false
+        },
+        id_category:{
+            type: DataTypes.BIGINT,
+            allowNull: false
+        },
+        status_user_1:{
             type: DataTypes.STRING,
             allowNull: false
         },
-        lastname:{
+        status_user_2:{
             type: DataTypes.STRING,
             allowNull: false
         },
-        phone: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        photo: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        address: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        password: {
-            type: DataTypes.STRING,
+        date:{
+            type: DataTypes.DATE,
             allowNull: false
         }
     },
@@ -44,10 +40,5 @@ const User = sequelize.define('User', {
         freezeTableName: true
     });
 
-    User.associate = _associate;
-    return User;
+    return Match;
 };
-
-function _associate(models) {
-    models.User.belongsTo(models.Category); 
-}
