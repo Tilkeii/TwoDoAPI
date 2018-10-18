@@ -39,6 +39,7 @@ const ensureAuthenticated = (req, res, next) => {
 
         decrypt()
             .then(exists)
+            .then(user => user ? user : Promise.reject({ code: 404, message: 'Token\'s user not found' }))
             .then(user => (res.locals.user = user))
             .then(() => next())
             .catch(err => res.status(err.code || 500).json({ error: err.message || err }));
