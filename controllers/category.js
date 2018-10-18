@@ -4,9 +4,12 @@ const Category = ModelIndex.Category;
 const CategoryController = function() {};
 
 CategoryController.addCategory = function(name){
-    return Category.addCategory({
+    return Category.create({
         name: name,
     })
+        .catch((err) => {
+            console.error(err);
+        })
 };
 
 CategoryController.deleteCategory = function(idCategory){
@@ -15,8 +18,11 @@ CategoryController.deleteCategory = function(idCategory){
             id: idCategory
         }
     })
-        .then(() => {
-            console.log("La catégorie a été supprimé.");
+        .then((category) => {
+            if(category) {
+                console.log("Category has been deleted.");
+                return true;
+            }
         })
         .catch((err) => {
             console.error(err);
@@ -24,62 +30,51 @@ CategoryController.deleteCategory = function(idCategory){
 };
 
 CategoryController.updateCategory = function(idCategory, name){
-    const category = Category.find({
+    return Category.find({
         where:{
             id: idCategory
         }
-    });
-
-    if(category === undefined){
-        return;
-    }
-
-    if(name === undefined) {
-        name = category.name;
-    }
-
-
-    category.updateAttributes({
-        name: name
-    });
-
-    return category;
-};
-
-UserController.getCategoryById = function(categoryId){
-    return Category.find({
-        where: {
-            id: categoryId
-        }
     })
         .then((category) => {
-            console.log('Category trouvé');
-            return category;
-        })
-        .catch((error) => {
-            console.error(err);
+            if(category === undefined){
+                return;
+            }
+
+            if(name === undefined) {
+                name = category.name;
+            }
+
+            return category.updateAttributes({
+                name: name
+            });
         });
 };
 
-UserController.getAllCategory = function(){
+
+CategoryController.getCategoryById = function(idCategory){
+    return Category.find({
+        where: {
+            id: idCategory
+        }
+    })
+        .then((category) => {
+            if(category === undefined) {
+                return;
+            }
+            console.log('Category found.');
+            return category;
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+};
+
+CategoryController.getAllCategory = function(){
     return Category.findAll()
         .catch((err) => {
             console.error(err);
         });
 };
 
-CategoryController.deleteCategory = function(idCategory){
-    return Category.destroy({
-        where:{
-            id: idCategory
-        }
-    })
-        .then(() => {
-            console.log("La catégorie a été supprimée.");
-        })
-        .catch((err) => {
-            console.error(err);
-        })
-};
 
 module.exports = CategoryController;

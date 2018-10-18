@@ -13,6 +13,7 @@ ModelIndex.getModel = function (modelName) {
 };
 
 // prod
+<<<<<<< HEAD
 const config = {
     user: process.env.DATA_MYSQL_USER || 'mysql',
     host: process.env.DATA_MYSQL_HOST || 'twodo.dokku.aws.me',
@@ -27,14 +28,22 @@ const sequelize = new Sequelize(config.database, config.user, config.password, {
     port: config.port,
     operatorsAliases: Op
 });
+=======
+// const sequelize = new Sequelize('twodo-sql', 'mysql', 'f17bbb04b81f5565', {
+//     host: 'twodo.dokku.aws.me',
+//     dialect: 'mysql',
+//     port: 2117,
+//     operatorsAliases: Op
+// });
+>>>>>>> chris
 
 // local
-// const sequelize = new Sequelize('twodo-sql', 'root', 'root', {
-//   host: 'localhost',
-//   dialect: 'mysql',
-//   port: 3306,
-//   operatorsAliases: Op
-// });
+const sequelize = new Sequelize('twodo-sql', 'root', 'root', {
+  host: 'localhost',
+  dialect: 'mysql',
+  port: 3306,
+  operatorsAliases: Op
+});
 
 // LOAD MODELS
 fs.readdirSync(__dirname)
