@@ -2,20 +2,12 @@
 
 module.exports = function(sequelize , DataTypes){
 
-const Proposition = sequelize.define('User', {
+const Proposition = sequelize.define('Proposition', {
 
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,
             autoIncrement: true
-        },
-        id_category:{
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        id_user: {
-            type: DataTypes.STRING,
-            allowNull: false
         },
         description: {
             type: DataTypes.TEXT,
@@ -28,5 +20,20 @@ const Proposition = sequelize.define('User', {
         freezeTableName: true
     });
 
+    Proposition.associate = _associate;
     return Proposition;
 };
+
+function _associate(models) {
+    models.Proposition.belongsTo(models.Category, {
+        foreignKey: {
+            allowNull: false
+        }
+    });
+
+    models.Proposition.belongsTo(models.User, {
+        foreignKey: {
+            allowNull: false
+        }
+    }); 
+}

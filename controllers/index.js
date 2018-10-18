@@ -1,5 +1,6 @@
 module.exports = {
 
-  UserController : require('./user')
+  UserController : require('./user'),
+  PropositionController : require('./proposition')
   
 };

@@ -1,30 +1,29 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const controllers = require('../controllers');
-const UserController = controllers.UserController;
+const PropositionController = controllers.PropositionController;
 //const jwt = require('jsonwebtoken');
 
-const userRouter = express.Router();
-userRouter.use(bodyParser.json());
+const propositionRouter = express.Router();
+propositionRouter.use(bodyParser.json());
 
-userRouter.post('/', function(req, res) {
-  const firstname = req.body.firstname;
-  const lastname = req.body.lastname;
-  const phone = req.body.phone;
-  const email = req.body.email;
-  const photo = req.body.photo;
-  const address = req.body.address;
-  const password = req.body.password;
+propositionRouter.post('/', function(req, res) {
+  const description = req.body.description;
   
-  let id_categ = parseInt(req.body.id_category);
+  let id_categ = parseInt(req.body.category_id);
+  let id_user = parseInt(req.body.user_id);
 
   if(isNaN(id_categ)) {
     id_categ = undefined;
   }
 
-  const user =  UserController.addUser(firstname, lastname, phone, email, photo, address, password, id_categ)
-    .then((user) => {
-      res.status(201).json(user);
+  if(isNaN(id_user)) {
+    id_user = undefined;
+  }
+
+  const proposition =  PropositionController.addProposition(description, id_categ, id_user)
+    .then((proposition) => {
+      res.status(201).json(proposition);
     })
     .catch((err) => {
       console.log(err);
@@ -32,54 +31,17 @@ userRouter.post('/', function(req, res) {
     });
 });
 
-userRouter.delete('/delete/:idUser' , function(req,res){
-  const idUser = req.params.idUser;
+propositionRouter.delete('/delete/:idProposition' , function(req,res){
+  const idProposition = req.params.idProposition;
 
-  if(idUser === undefined){
+  if(idProposition === undefined){
     res.status(500).end();
     return;
   }
-  UserController.deleteUser(idUser)
-  .then((user) => {
-    res.status(201).json(user);
-  })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).end();
-  })
-});
-
-userRouter.put('/update' , function(req,res){
-  const idUser = req.body.id;
-  const firstname = req.body.firstname;
-  const lastname = req.body.lastname;
-  const phone = req.body.phone;
-  const email = req.body.email;
-  const photo = req.body.photo;
-  const address = req.body.address;
-  const password = req.body.password;
-  let id_categ = parseInt(req.body.id_category);
-
-  if(isNaN(id_categ)) {
-    id_categ = undefined;
-  }
-
-  UserController.updateUser(idUser, firstname, lastname, phone, email, photo, address, password, id_categ)
-  .then((user)=>{
-    console.log("User was successfully updated.");
-    res.status(200).json(user);
-  })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).end();
-  })
-});
-
-userRouter.get('/getById/:id' , function(req,res){
-  UserController.getUserById(req.params.id)
-  .then((user) => {
-    if(user) {
-      res.status(200).json(user);
+  PropositionController.deleteProposition(idProposition)
+  .then((proposition) => {
+    if(proposition) {
+      res.status(204).end();
     } else {
       res.status(404).end();
     }
@@ -90,77 +52,49 @@ userRouter.get('/getById/:id' , function(req,res){
   })
 });
 
-/*
-userRouter.post('/login', function(req, res){
-  const email = req.body.email;
-  const password = req.body.password;
+propositionRouter.put('/update' , function(req,res){
+  const idProposition = req.body.id;
+  const description = req.body.description;
+  
+  let id_categ = parseInt(req.body.category_id);
+  let id_user = parseInt(req.body.user_id);
 
-  const user = UserController.login(email, password)
-  .then((user) => {
-    if(user == null){
-      res.send('Accès refusé').end();
-      return;
-    }
-
-    jwt.sign({user}, 'secretkey', {expiresIn: '1h'}, (err, token) =>{
-      res.json({
-        token
-      });
-    });
-  })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).end();
-  })
-});
-
-userRouter.get('/allUser', function(req,res){
-  UserController.getAllUser()
-  .then((users) => {
-    res.status(201).json(users);
-  })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).end();
-  })
-});
-
-userRouter.get('/getUserById/:id' , function(req,res){
-  UserController.getUserById(req.params.id)
-  .then((user) => {
-    res.status(201).json(user);
-  })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).end();
-  })
-});
-
-
-
-userRouter.put('/updateUser' , function(req,res){
-  const token = req.headers["authorization"];
-  jwt.verify(token, 'secretkey', (err) =>{
-  if(err){
-    res.status(403).end('Accès refusé');
-      return;
+  if(isNaN(id_categ)) {
+    id_categ = null;
   }
-  else{
-    const idUser = req.body.idUser;
-    const username = req.body.username;
-    const password = req.body.password;
-    const email = req.body.email;
 
-    UserController.updateUser(idUser, username, password, email)
-    .then(()=>{
-      console.log("L'utilisateur à été mis à jour");
-    })
-    .catch((err) => {
-      console.error(err);
-    })
-  }});
+  if(isNaN(id_user)) {
+    id_user = null;
+  }
+
+  PropositionController.updateProposition(idProposition, description, id_categ, id_user)
+  .then((proposition)=>{
+    if(proposition) {
+      console.log("Proposition was successfully updated.");
+      res.status(200).json(proposition);
+    } else {
+      res.status(404).end();
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).end();
+  })
 });
-*/
 
+propositionRouter.get('/getById/:id' , function(req,res){
+  PropositionController.getPropositionById(req.params.id)
+  .then((proposition) => {
+    if(proposition) {
+      res.status(200).json(proposition);
+    } else {
+      res.status(404).end();
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).end();
+  })
+});
 
-module.exports = userRouter;
+module.exports = propositionRouter;
