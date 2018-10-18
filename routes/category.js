@@ -7,72 +7,85 @@ const CategoryController = controllers.CategoryController;
 const categoryRouter = express.Router();
 categoryRouter.use(bodyParser.json());
 
-categoryRouter.post('/category', function(req, res) {
+
+categoryRouter.post('/', function(req, res) {
     const name = req.body.name;
 
-    const category =  CategoryController.addCategory(name)
-        .then((category) => {
-            res.status(201).json(category);
-        })
-        .catch((err) => {
-            res.status(500).end();
-        });
+    const category = CategoryController.addCategory(name)
+    .then((category) => {
+        res.status(201).json(category);
+    })
+    .catch((err) => {
+        res.status(500).end();
+    });
 });
 
-categoryRouter.get('/getAllCategory', function(req, res) {
+categoryRouter.get('/getAll', function(req, res) {
 
     CategoryController.getAllCategory()
-        .then((categories) => {
-            res.status(201).json(categories);
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).end();
-        })
+    .then((categories) => {
+        res.status(201).json(categories);
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).end();
+    });
 });
 
-categoryRouter.get('/getCategoryById/:id' , function(req,res){
+categoryRouter.get('/getById/:id' , function(req,res){
     CategoryController.getCategoryById(req.params.id)
-        .then((category) => {
-            res.status(201).json(category);
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).end();
-        })
+    .then((category) => {
+        if(category) {
+            res.status(200).json(category);
+        } else {
+            res.status(404).end();
+        }
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).end();
+    });
 });
-;
 
-categoryRouter.delete('/deleteCategory/:idCategory' , function(req,res){
+categoryRouter.delete('/delete/:idCategory' , function(req,res){
     const idCategory = req.params.idCategory;
 
     if(idCategory === undefined){
         res.status(500).end();
         return;
     }
-    const idUser = req.params.idCategory;
-
-    if(idUser === undefined){
+    
+    CategoryController.deleteCategory(idCategory)
+    .then((category) => {
+        if(category) {
+            res.status(204).end();
+        } else {
+            res.status(404).end();
+        }
+    })
+    .catch((err) => {
+        console.error(err);
         res.status(500).end();
-        return;
-    }
-    CategoryController.deleteUser(idCategory)
-        .then((category) => {
-            res.status(201).json(category);
-        })
-        .catch((err) => {
-            console.error(err);
-        })
+    })
 });
 
-categoryRouter.put('/updateCategory' , function(req,res){
+categoryRouter.put('/update' , function(req,res){
+    const idCategory = req.body.id;
     const name = req.body.name;
 
-    CategoryController.updateCategory(name)
-        .then(()=>{
-            console.log("La categorie a été mis à jour");
-        })
-        .catch((err) => {
-            console.error(err);
-        })
+    CategoryController.updateCategory(idCategory, name)
+    .then((category) => {
+        if(category) {
+            console.log("Category was successfully updated.");
+            res.status(200).json(category);
+        } else {
+            res.status(404).end();
+        }
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).end();
+    })
 });
+
+module.exports = categoryRouter;

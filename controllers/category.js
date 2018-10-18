@@ -4,8 +4,11 @@ const Category = ModelIndex.Category;
 const CategoryController = function() {};
 
 CategoryController.addCategory = function(name){
-    return Category.addCategory({
+    return Category.create({
         name: name,
+    })
+    .catch((err) => {
+        console.error(err);
     })
 };
 
@@ -15,45 +18,50 @@ CategoryController.deleteCategory = function(idCategory){
             id: idCategory
         }
     })
-        .then(() => {
-            console.log("La catégorie a été supprimé.");
-        })
-        .catch((err) => {
-            console.error(err);
-        })
+    .then((category) => {
+        if(category) {
+            console.log("Category has been deleted.");
+            return true;
+        }
+    })
+    .catch((err) => {
+        console.error(err);
+    })
 };
 
 CategoryController.updateCategory = function(idCategory, name){
-    const category = Category.find({
+    return Category.find({
         where:{
             id: idCategory
         }
+    })
+    .then((category) => {
+        if(category === undefined){
+            return;
+        }
+    
+        if(name === undefined) {
+            name = category.name;
+        }
+    
+        return category.updateAttributes({
+            name: name
+        });
     });
-
-    if(category === undefined){
-        return;
-    }
-
-    if(name === undefined) {
-        name = category.name;
-    }
-
-
-    category.updateAttributes({
-        name: name
-    });
-
-    return category;
 };
 
-UserController.getCategoryById = function(categoryId){
+
+CategoryController.getCategoryById = function(idCategory){
     return Category.find({
         where: {
-            id: categoryId
+            id: idCategory
         }
     })
         .then((category) => {
-            console.log('Category trouvé');
+            if(category === undefined) {
+                return;
+            }
+            console.log('Category found.');
             return category;
         })
         .catch((error) => {
@@ -61,25 +69,12 @@ UserController.getCategoryById = function(categoryId){
         });
 };
 
-UserController.getAllCategory = function(){
+CategoryController.getAllCategory = function(){
     return Category.findAll()
         .catch((err) => {
             console.error(err);
         });
 };
 
-CategoryController.deleteCategory = function(idCategory){
-    return Category.destroy({
-        where:{
-            id: idCategory
-        }
-    })
-        .then(() => {
-            console.log("La catégorie a été supprimée.");
-        })
-        .catch((err) => {
-            console.error(err);
-        })
-};
 
 module.exports = CategoryController;
