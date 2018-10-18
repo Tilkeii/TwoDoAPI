@@ -112,8 +112,146 @@ matchRouter.put('/update' , function(req,res){
   })
 });
 
+matchRouter.post('/matchLike/:type' , function(req,res){
+  const date = new Date();
+  
+  let user_id_1 = parseInt(req.body.user_id_1);
+  let user_id_2 = parseInt(req.body.user_id_2);
+  let category_id = parseInt(req.body.category_id);
+
+  /**
+   * Type == 1 is who people who propose a service
+   * Else is people who search 
+   */
+  let type = parseInt(req.params.type);
+
+
+  if(isNaN(user_id_1)) {
+    user_id_1 = null;
+  }
+
+  if(isNaN(user_id_2)) {
+    user_id_2 = null;
+  }
+
+  if(isNaN(category_id)) {
+    category_id = null;
+  }
+
+  if(isNaN(type)) {
+    type = 0;
+  }
+
+  MatchController.setMatchLike(user_id_1, user_id_2, category_id, type)
+  .then((match)=>{
+    if(match) {
+      console.log("Match was successfully updated.");
+      res.status(200).json(match);
+    } else {
+      res.status(404).end();
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).end();
+  })
+});
+
+matchRouter.post('/matchPass/:type' , function(req,res){
+  const date = new Date();
+  
+  let user_id_1 = parseInt(req.body.user_id_1);
+  let user_id_2 = parseInt(req.body.user_id_2);
+  let category_id = parseInt(req.body.category_id);
+
+  /**
+   * Type == 1 is who people who propose a service
+   * Else is people who search 
+   */
+  let type = parseInt(req.params.type);
+
+
+  if(isNaN(user_id_1)) {
+    user_id_1 = null;
+  }
+
+  if(isNaN(user_id_2)) {
+    user_id_2 = null;
+  }
+
+  if(isNaN(category_id)) {
+    category_id = null;
+  }
+
+  if(isNaN(type)) {
+    type = 0;
+  }
+
+  MatchController.setMatchPass(user_id_1, user_id_2, category_id, type)
+  .then((match)=>{
+    if(match) {
+      console.log("Match was successfully updated.");
+      res.status(200).json(match);
+    } else {
+      res.status(404).end();
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).end();
+  })
+});
+
 matchRouter.get('/getById/:id' , function(req,res){
   MatchController.getMatchById(req.params.id)
+  .then((match) => {
+    if(match) {
+      res.status(200).json(match);
+    } else {
+      res.status(404).end();
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).end();
+  })
+});
+
+// All match where two users have accepted
+matchRouter.get('/getAllMatch/:idUser/:idCateg' , function(req,res){
+  MatchController.getAllMatch(req.params.idUser, req.params.idCateg)
+  .then((match) => {
+    if(match) {
+      res.status(200).json(match);
+    } else {
+      res.status(404).end();
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).end();
+  })
+});
+
+// All match for people who search by category
+matchRouter.get('/getNextMatchSearch/:idUser/:idCateg' , function(req,res){
+  MatchController.getNextMatchSearch(req.params.idUser, req.params.idCateg)
+  .then((match) => {
+    if(match) {
+      res.status(200).json(match);
+    } else {
+      res.status(404).end();
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).end();
+  })
+});
+
+// All match for people who propose a service
+matchRouter.get('/getNextMatchPropos/:idUser/:idCateg' , function(req,res){
+  MatchController.getNextMatchProposition(req.params.idUser, req.params.idCateg)
   .then((match) => {
     if(match) {
       res.status(200).json(match);
