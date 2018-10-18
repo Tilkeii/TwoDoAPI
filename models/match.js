@@ -11,17 +11,11 @@ const Match = sequelize.define('Match', {
         },
         status_user_1:{
             type: DataTypes.INTEGER,
-            allowNull: false,
-            validate: {
-                isIn: [[0, 1, 2]]
-            }
+            allowNull: false
         },
         status_user_2:{
             type: DataTypes.INTEGER,
-            allowNull: false,
-            validate: {
-                isIn: [[0, 1, 2]]
-            }
+            allowNull: false
         },
         date:{
             type: DataTypes.DATE,
@@ -53,7 +47,6 @@ function _associate(models) {
     });
     models.Match.belongsTo(models.Category, {
         foreignKey: {
-            name: 'category_id',
             allowNull: false
         }
     }); 

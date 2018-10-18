@@ -15,7 +15,7 @@ function _startServer() {
 
   RouteManager.attach(app);
 
-  app.listen(80, function() {
-    console.log('Server started on 80...');
+  app.listen(8080, function() {
+    console.log('Server started on 8080...');
   });
 }

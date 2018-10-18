@@ -3,14 +3,23 @@ const User = ModelIndex.User;
 
 const UserController = function() {};
 
-UserController.addUser = function(username, password, email){
+UserController.addUser = function(firstname, lastname, phone, email, photo, address, password, id_categ){
   return User.create({
-    username: username,
+    firstname: firstname,
+    lastname: lastname,
+    phone: phone,
+    email: email,
+    photo: photo,
+    address: address,
     password: password,
-    email: email
+    category_id: id_categ
+  })
+  .catch((err) => {
+    console.error(err);
   })
 };
 
+/*
 UserController.deleteUser = function(idUser){
   return User.destroy({
     where:{
@@ -96,5 +105,5 @@ UserController.login = function(email, password){
     }
   })
 };
-
+*/
 module.exports = UserController;
