@@ -19,7 +19,7 @@ UserController.addUser = function(firstname, lastname, phone, email, photo, addr
   })
 };
 
-/*
+
 UserController.deleteUser = function(idUser){
   return User.destroy({
     where:{
@@ -27,45 +27,72 @@ UserController.deleteUser = function(idUser){
     }
   })
   .then(() => {
-      console.log("L'utilisateur à été supprimé.");
+      console.log("User was deleted.");
     })
     .catch((err) => {
       console.error(err);
     })
 };
 
-UserController.updateUser = function(idUser, newUsername, newPassword, newEmail) {
-  const user = User.find({
+
+UserController.updateUser = function(idUser, newFirstname, newLastname, newPhone, newEmail, newPhoto, newAddress, newPassword, newId_categ) {
+  return User.find({
     where:{
       id: idUser
     }
-  });
-
-  if(user === undefined){
-    return;
-  }
-
-  if(newUsername === undefined) {
-    newUsername = user.username;
-  }
-
-  if(newPassword === undefined) {
-      newPassword = user.password;
-  }
-
-  if(newEmail === undefined) {
+  })
+  .then((user) => {
+    if(user === undefined){
+      return;
+    }
+  
+    if(newFirstname === undefined) {
+      newFirstname = user.firstname;
+    }
+  
+    if(newLastname === undefined) {
+      newLastname = user.lastname;
+    }
+  
+    if(newPhone === undefined) {
+      newPhone = user.phone;
+    }
+  
+    if(newEmail === undefined) {
       newEmail = user.email;
-  }
+    }
+    if(newPhoto === undefined) {
+      newPhoto = user.photo;
+    }
+    if(newAddress === undefined) {
+      newAddress = user.address;
+    }
+    if(newPassword === undefined) {
+      newPassword = user.password;
+    }
+    if(newId_categ === undefined) {
+      newId_categ = user.category_id;
+    }
+  
+    return user.updateAttributes({
+      firstname: newFirstname,
+      lastname: newLastname,
+      phone: newPhone,
+      email: newEmail,
+      photo: newPhoto,
+      address: newAddress,
+      password: newPassword,
+      category_id: newId_categ
+    });
 
-  user.updateAttributes({
-    username: newUsername,
-    password: newPassword,
-    email: newEmail
+  })
+  .catch((err)=>{
+    console.error(err);
   });
-
-  return user;
+  
 };
 
+/*
 UserController.getUserById = function(userId){
   return User.find({
     where: {
