@@ -16,6 +16,7 @@ UserController.addUser = function(firstname, lastname, phone, email, address, pa
   })
   .catch((err) => {
     console.error(err);
+    return;
   })
 };
 
@@ -43,19 +44,24 @@ UserController.getAllUser = function(){
   });
 };
 
-/*
+
 UserController.deleteUser = function(idUser){
   return User.destroy({
     where:{
       id: idUser
     }
   })
-  .then(() => {
+  .then((user) => {
+    if(user) {
       console.log("User was deleted.");
-    })
-    .catch((err) => {
-      console.error(err);
-    })
+      return true;
+    } 
+    return;
+  })
+  .catch((err) => {
+    console.error(err);
+    return;
+  })
 };
 
 
@@ -66,35 +72,35 @@ UserController.updateUser = function(idUser, newFirstname, newLastname, newPhone
     }
   })
   .then((user) => {
-    if(user === undefined){
+    if(user === undefined || user === null){
       return;
     }
-
-    if(newFirstname === undefined) {
+  
+    if(newFirstname === undefined || newFirstname === null) {
       newFirstname = user.firstname;
     }
-
-    if(newLastname === undefined) {
+  
+    if(newLastname === undefined || newLastname === null) {
       newLastname = user.lastname;
     }
-
-    if(newPhone === undefined) {
+  
+    if(newPhone === undefined || newPhone === null) {
       newPhone = user.phone;
     }
-
-    if(newEmail === undefined) {
+  
+    if(newEmail === undefined || newEmail === null) {
       newEmail = user.email;
     }
-    if(newPhoto === undefined) {
+    if(newPhoto === undefined || newPhoto === null) {
       newPhoto = user.photo;
     }
-    if(newAddress === undefined) {
+    if(newAddress === undefined || newAddress === null) {
       newAddress = user.address;
     }
-    if(newPassword === undefined) {
+    if(newPassword === undefined || newPassword === null) {
       newPassword = user.password;
     }
-    if(newId_categ === undefined) {
+    if(newId_categ === undefined || newId_categ === null) {
       newId_categ = user.category_id;
     }
 
@@ -112,25 +118,30 @@ UserController.updateUser = function(idUser, newFirstname, newLastname, newPhone
   })
   .catch((err)=>{
     console.error(err);
+    return;
   });
 
 };
 
-/*
-UserController.getUserById = function(userId){
+
+UserController.getUserById = function(idUser){
   return User.find({
     where: {
-      id: userId
+      id: idUser
     }
   })
   .then((user) => {
-    console.log('Utilisateur trouvé');
-    return user;
+    if(user) {
+      console.log('User found.');
+      return user;
+    }
+    return;
   })
   .catch((error) => {
     console.error(err);
+    return;
   });
 };
-*/
+
 
 module.exports = UserController;
