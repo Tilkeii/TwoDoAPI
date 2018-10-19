@@ -193,7 +193,7 @@ MatchController.getAllMatch = function(idUser){
 
 
 MatchController.getNextMatchSearch = function(idUser, idCategory){
-  return sequelize.query("SELECT u.*, p.description FROM User u, proposition p " +
+  return sequelize.query("SELECT u.*, p.description FROM User u, Proposition p " +
     "WHERE p.user_id = u.id AND p.user_id != :idUser AND p.category_id = :idCategory",
     { replacements: { idUser: idUser, idCategory: idCategory }, type: sequelize.QueryTypes.SELECT })
   .then((match) => {
