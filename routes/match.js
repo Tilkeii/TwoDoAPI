@@ -196,7 +196,7 @@ matchRouter.get('/getById/:id' , function(req,res){
 matchRouter.get('/getAllMatch/:idUser' , function(req,res){
   MatchController.getAllMatch(req.params.idUser)
   .then((match) => {
-    if(match) {
+    if(match.length > 0) {
       res.status(200).json(match);
     } else {
       res.status(404).end();
