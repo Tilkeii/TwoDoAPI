@@ -193,8 +193,8 @@ MatchController.getAllMatch = function(idUser){
 
 
 MatchController.getNextMatchSearch = function(idUser, idCategory){
-  return sequelize.query("SELECT u.*, p.description FROM User u, Proposition p " +
-    "WHERE p.user_id = u.id AND p.user_id != :idUser AND p.category_id = :idCategory",
+  return sequelize.query("SELECT u.*, p.description, c.name FROM User u, Proposition p, Category c " +
+    "WHERE p.user_id = u.id AND c.id = p.category_id AND p.user_id != :idUser AND p.category_id = :idCategory",
     { replacements: { idUser: idUser, idCategory: idCategory }, type: sequelize.QueryTypes.SELECT })
   .then((match) => {
     if(match) {
@@ -210,9 +210,9 @@ MatchController.getNextMatchSearch = function(idUser, idCategory){
 };
 
 MatchController.getNextMatchProposition = function(idUser, idCategory){
-  return sequelize.query("SELECT u.*, m.status_user_1, m.status_user_2, m.date FROM `Match` m, User u " +
-    "WHERE u.id = m.user_id_1 AND m.status_user_1 = 2 AND m.status_user_2 = 0 " +
-    "AND m.category_id = :idCateg AND m.user_id_1 != :idUser",
+  return sequelize.query("SELECT u.*, m.status_user_1, m.status_user_2, m.date, c.name FROM `Match` m, User u, Category c " +
+    "WHERE u.id = m.user_id_1 AND c.id = m.category_id AND m.status_user_1 = 2 AND m.status_user_2 = 0 AND m.category_id = :idCateg " +
+    "AND m.user_id_1 != :idUser",
     { replacements: { idCateg: idCategory, idUser: idUser }, type: sequelize.QueryTypes.SELECT })
   .then((match) => {
     if(match) {
