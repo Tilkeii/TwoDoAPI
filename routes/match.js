@@ -9,7 +9,7 @@ matchRouter.use(bodyParser.json());
 
 matchRouter.post('/', function(req, res) {
   const date = new Date();
-  
+
   let user_id_1 = parseInt(req.body.user_id_1);
   let user_id_2 = parseInt(req.body.user_id_2);
   let category_id = parseInt(req.body.category_id);
@@ -70,7 +70,7 @@ matchRouter.delete('/delete/:idMatch' , function(req,res){
 matchRouter.put('/update' , function(req,res){
   const idMatch = req.body.id;
   const date = new Date();
-  
+
   let user_id_1 = parseInt(req.body.user_id_1);
   let user_id_2 = parseInt(req.body.user_id_2);
   let category_id = parseInt(req.body.category_id);
@@ -114,7 +114,7 @@ matchRouter.put('/update' , function(req,res){
 
 matchRouter.post('/changeMatch' , function(req,res){
   const date = new Date();
-  
+
   /**
    * Type == 0 is people who pass a search
    * Type == 1 is people who like for a search
@@ -195,6 +195,7 @@ matchRouter.get('/getById/:id' , function(req,res){
 // All match where two users have accepted
 matchRouter.get('/getAllMatch/:idUser' , function(req,res){
   MatchController.getAllMatch(req.params.idUser)
+  .then(match => match ? match : res.json([]))
   .then((match) => {
     if(match.length > 0) {
       res.status(200).json(match);
