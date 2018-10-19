@@ -173,10 +173,10 @@ MatchController.setMatchPass = function(id_user_1, id_user_2, idCateg, type){
 };
 
 
-MatchController.getAllMatch = function(idUser, idCategory){
-  return sequelize.query("SELECT * FROM `match` WHERE category_id = :idCategory " +
-    "AND status_user_1 = 2 AND status_user_2 = 2 AND (user_id_1 = :idUser OR user_id_2 = :idUser)",
-    { replacements: { idCategory: idCategory, idUser: idUser }, type: sequelize.QueryTypes.SELECT })
+MatchController.getAllMatch = function(idUser){
+  return sequelize.query("SELECT * FROM `match` WHERE status_user_1 = 2 AND status_user_2 = 2 " +
+    "AND (user_id_1 = :idUser OR user_id_2 = :idUser)",
+    { replacements: { idUser: idUser }, type: sequelize.QueryTypes.SELECT })
   .then((match) => {
     if(match) {
       console.log('My all match found.');

@@ -193,8 +193,8 @@ matchRouter.get('/getById/:id' , function(req,res){
 });
 
 // All match where two users have accepted
-matchRouter.get('/getAllMatch/:idUser/:idCateg' , function(req,res){
-  MatchController.getAllMatch(req.params.idUser, req.params.idCateg)
+matchRouter.get('/getAllMatch/:idUser' , function(req,res){
+  MatchController.getAllMatch(req.params.idUser)
   .then((match) => {
     if(match) {
       res.status(200).json(match);
