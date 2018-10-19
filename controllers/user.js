@@ -144,4 +144,32 @@ UserController.getUserById = function(idUser){
 };
 
 
+UserController.updatePhoto = function(idUser, newPhoto) {
+  return User.find({
+    where:{
+      id: idUser
+    }
+  })
+  .then((user) => {
+    if(user === undefined || user === null){
+      return;
+    }
+
+    if(newPhoto === undefined || newPhoto === null) {
+      newPhoto = user.photo;
+    }
+
+    return user.updateAttributes({
+      photo: newPhoto
+    });
+
+  })
+  .catch((err)=>{
+    console.error(err);
+    return;
+  });
+
+};
+
+
 module.exports = UserController;

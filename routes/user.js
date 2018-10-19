@@ -126,4 +126,24 @@ userRouter.get('/getById/:id' , function(req,res){
 });
 
 
+userRouter.put('/editPhoto' , function(req,res){
+  const idUser = req.body.id;
+  const photo = req.body.photo;
+
+  UserController.updatePhoto(idUser, photo)
+  .then((user)=>{
+    if(user) {
+      console.log("User photo was successfully updated.");
+      res.status(200).json(user);
+    } else {
+      res.status(404).end();
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).end();
+  })
+});
+
+
 module.exports = userRouter;
