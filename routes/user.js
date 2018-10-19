@@ -9,7 +9,7 @@ const ensureAuthenticated = middlewares.ensureAuthenticated;
 const userRouter = express.Router();
 userRouter.use(bodyParser.urlencoded({ extended: true }));
 userRouter.use(bodyParser.json());
-userRouter.use(ensureAuthenticated);
+// userRouter.use(ensureAuthenticated);
 
 userRouter.post('/', function(req, res) {
   const firstname = req.body.firstname;
