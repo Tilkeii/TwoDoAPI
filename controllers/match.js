@@ -175,7 +175,7 @@ MatchController.setMatchPass = function(id_user_1, id_user_2, idCateg, type){
 
 MatchController.getAllMatch = function(idUser){
   return sequelize.query("SELECT m.*, u.firstname, u.lastname, u.phone, u.email, u.photo, u.address, u.password " + 
-    "FROM `match` m, user u WHERE u.id = m.user_id_2 AND m.status_user_1 = 2 AND m.status_user_2 = 2 " + 
+    "FROM `Match` m, user u WHERE u.id = m.user_id_2 AND m.status_user_1 = 2 AND m.status_user_2 = 2 " + 
     "AND (m.user_id_1 = :idUser OR m.user_id_2 = :idUser)",
   { replacements: { idUser: idUser }, type: sequelize.QueryTypes.SELECT })
   .then((match) => {
@@ -210,7 +210,7 @@ MatchController.getNextMatchSearch = function(idUser, idCategory){
 };
 
 MatchController.getNextMatchProposition = function(idUser, idCategory){
-  return sequelize.query("SELECT u.*, m.status_user_1, m.status_user_2, m.date FROM `match` m, user u " +
+  return sequelize.query("SELECT u.*, m.status_user_1, m.status_user_2, m.date FROM `Match` m, user u " +
     "WHERE u.id = m.user_id_1 AND m.status_user_1 = 2 AND m.status_user_2 = 0 " +
     "AND m.category_id = :idCateg AND m.user_id_1 != :idUser",
     { replacements: { idCateg: idCategory, idUser: idUser }, type: sequelize.QueryTypes.SELECT })
