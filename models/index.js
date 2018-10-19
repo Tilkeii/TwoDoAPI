@@ -59,7 +59,7 @@ ModelIndex.Sequelize = Sequelize;
 ModelIndex.openDatabase = function() {
   return sequelize
       .authenticate()
-      .then(() => sequelize.sync(/*{force: true}*/));
+      .then(() => sequelize.sync({force: true}));
 };
 
 module.exports = ModelIndex;

@@ -29,7 +29,7 @@ MatchController.deleteMatch = function(idMatch){
     if(match) {
       console.log("Match was deleted.");
       return true;
-    } 
+    }
     return;
     })
     .catch((err) => {
@@ -49,15 +49,15 @@ MatchController.updateMatch = function(idMatch, new_user_id_1, new_user_id_2, ne
     if(match === undefined || match === null){
       return;
     }
-  
+
     if(new_user_id_1 === undefined || new_user_id_1 === null) {
       new_user_id_1 = match.user_id_1;
     }
-  
+
     if(new_user_id_2 === undefined || new_user_id_2 === null) {
       new_user_id_2 = match.user_id_2;
     }
-  
+
     if(new_category_id === undefined || new_category_id === null) {
       new_category_id = match.category_id;
     }
@@ -184,7 +184,7 @@ MatchController.getAllMatch = function(idUser){
     }
     return;
   })
-  .catch((error) => {
+  .catch((err) => {
     console.error(err);
     return;
   });
@@ -209,7 +209,7 @@ MatchController.getNextMatchSearch = function(idUser, idCategory){
 };
 
 MatchController.getNextMatchProposition = function(idUser, idCategory){
-  return sequelize.query("SELECT u.*, m.status_user_1, m.status_user_2, m.date FROM `match` m, user u " + 
+  return sequelize.query("SELECT u.*, m.status_user_1, m.status_user_2, m.date FROM `match` m, user u " +
     "WHERE u.id = m.user_id_1 AND m.status_user_1 = 2 AND m.status_user_2 = 0 " +
     "AND m.category_id = :idCateg AND m.user_id_1 != :idUser",
     { replacements: { idCateg: idCategory, idUser: idUser }, type: sequelize.QueryTypes.SELECT })
