@@ -121,15 +121,19 @@ MatchController.setMatchLike = function(id_user_1, id_user_2, idCateg, type){
   .then((match) => {
     if(match) {
       console.log('Match like found.');
-      if(type === 1) {
+      if(type === 3) {
         return MatchController.updateMatch(match.id, id_user_1, id_user_2, idCateg, null, 2, new Date());
+      } else if(type === 1) {
+        return MatchController.updateMatch(match.id, id_user_1, id_user_2, idCateg, 2, null, new Date());
       }
-      return MatchController.updateMatch(match.id, id_user_1, id_user_2, idCateg, 2, null, new Date());
+      return;
     }
-    if(type === 1) {
+    if(type === 3) {
       return MatchController.addMatch(id_user_1, id_user_2, idCateg, 0, 2, new Date());
+    } else if(type === 1) {
+      return MatchController.addMatch(id_user_1, id_user_2, idCateg, 2, 0, new Date());
     }
-    return MatchController.addMatch(id_user_1, id_user_2, idCateg, 2, 0, new Date());
+    return;
   })
   .catch((err) => {
     console.error(err);
@@ -148,15 +152,19 @@ MatchController.setMatchPass = function(id_user_1, id_user_2, idCateg, type){
   .then((match) => {
     if(match) {
       console.log('Match pass found.');
-      if(type === 1) {
+      if(type === 2) {
         return MatchController.updateMatch(match.id, id_user_1, id_user_2, idCateg, null, 1, new Date());
+      } else if(type === 0) {
+        return MatchController.updateMatch(match.id, id_user_1, id_user_2, idCateg, 1, null, new Date());
       }
-      return MatchController.updateMatch(match.id, id_user_1, id_user_2, idCateg, 1, null, new Date());
+      return;
     }
-    if(type === 1) {
+    if(type === 2) {
       return MatchController.addMatch(id_user_1, id_user_2, idCateg, 0, 1, new Date());
+    } else if(type === 0) {
+      return MatchController.addMatch(id_user_1, id_user_2, idCateg, 1, 0, new Date());
     }
-    return MatchController.addMatch(id_user_1, id_user_2, idCateg, 1, 0, new Date());
+    return;
   })
   .catch((err) => {
     console.error(err);

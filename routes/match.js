@@ -112,18 +112,20 @@ matchRouter.put('/update' , function(req,res){
   })
 });
 
-matchRouter.post('/matchLike/:type' , function(req,res){
+matchRouter.post('/changeMatch' , function(req,res){
   const date = new Date();
   
+  /**
+   * Type == 0 is people who pass a search
+   * Type == 1 is people who like for a search
+   * Type == 2 is people who pass a proposition
+   * Type == 3 is people who like a proposition
+   */
+  let type = parseInt(req.body.type);
+
   let user_id_1 = parseInt(req.body.user_id_1);
   let user_id_2 = parseInt(req.body.user_id_2);
   let category_id = parseInt(req.body.category_id);
-
-  /**
-   * Type == 1 is who people who propose a service
-   * Else is people who search 
-   */
-  let type = parseInt(req.params.type);
 
 
   if(isNaN(user_id_1)) {
@@ -139,67 +141,40 @@ matchRouter.post('/matchLike/:type' , function(req,res){
   }
 
   if(isNaN(type)) {
-    type = 0;
+    type = null;
   }
 
-  MatchController.setMatchLike(user_id_1, user_id_2, category_id, type)
-  .then((match)=>{
-    if(match) {
-      console.log("Match was successfully updated.");
-      res.status(200).json(match);
-    } else {
-      res.status(404).end();
-    }
-  })
-  .catch((err) => {
-    console.error(err);
+  if(type === 0 || type === 2) {
+    MatchController.setMatchPass(user_id_1, user_id_2, category_id, type)
+    .then((match)=>{
+      if(match) {
+        console.log("Match was successfully updated.");
+        res.status(200).json(match);
+      } else {
+        res.status(404).end();
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).end();
+    })
+  } else if(type === 1 || type === 3) {
+    MatchController.setMatchLike(user_id_1, user_id_2, category_id, type)
+    .then((match)=>{
+      if(match) {
+        console.log("Match was successfully updated.");
+        res.status(200).json(match);
+      } else {
+        res.status(404).end();
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).end();
+    })
+  } else {
     res.status(500).end();
-  })
-});
-
-matchRouter.post('/matchPass/:type' , function(req,res){
-  const date = new Date();
-  
-  let user_id_1 = parseInt(req.body.user_id_1);
-  let user_id_2 = parseInt(req.body.user_id_2);
-  let category_id = parseInt(req.body.category_id);
-
-  /**
-   * Type == 1 is who people who propose a service
-   * Else is people who search 
-   */
-  let type = parseInt(req.params.type);
-
-
-  if(isNaN(user_id_1)) {
-    user_id_1 = null;
   }
-
-  if(isNaN(user_id_2)) {
-    user_id_2 = null;
-  }
-
-  if(isNaN(category_id)) {
-    category_id = null;
-  }
-
-  if(isNaN(type)) {
-    type = 0;
-  }
-
-  MatchController.setMatchPass(user_id_1, user_id_2, category_id, type)
-  .then((match)=>{
-    if(match) {
-      console.log("Match was successfully updated.");
-      res.status(200).json(match);
-    } else {
-      res.status(404).end();
-    }
-  })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).end();
-  })
 });
 
 matchRouter.get('/getById/:id' , function(req,res){
